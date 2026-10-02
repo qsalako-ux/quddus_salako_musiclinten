@@ -36,11 +36,11 @@ TEST(RateLimiterTest, BlocksRequestOverTheLimitAndLogsOnce) {
     StrictMock<MockLogger> logger;  // any unexpected log call fails the test
     RateLimiter limiter("api", 2, 60, clock, logger);
 
-    EXPECT_CALL(logger, log(HasSubstr("alice"))).Times(1);
+    EXPECT_CALL(logger, log(HasSubstr("quddus"))).Times(1);
 
-    EXPECT_TRUE(limiter.allowRequest("alice"));
-    EXPECT_TRUE(limiter.allowRequest("alice"));
-    EXPECT_FALSE(limiter.allowRequest("alice"));
+    EXPECT_TRUE(limiter.allowRequest("quddus"));
+    EXPECT_TRUE(limiter.allowRequest("quddus"));
+    EXPECT_FALSE(limiter.allowRequest("quddus"));
 }
 
 TEST(RateLimiterTest, DoesNotLogWhenRequestIsAllowed) {
@@ -50,7 +50,7 @@ TEST(RateLimiterTest, DoesNotLogWhenRequestIsAllowed) {
 
     EXPECT_CALL(logger, log(testing::_)).Times(0);
 
-    EXPECT_TRUE(limiter.allowRequest("bob"));
+    EXPECT_TRUE(limiter.allowRequest("nayel"));
 }
 
 TEST(RateLimiterTest, AllowsRequestsAgainAfterWindowExpires) {
@@ -58,12 +58,12 @@ TEST(RateLimiterTest, AllowsRequestsAgainAfterWindowExpires) {
     NiceMock<MockLogger> logger;
     RateLimiter limiter("api", 1, 60, clock, logger);
 
-    EXPECT_TRUE(limiter.allowRequest("carol"));
-    EXPECT_FALSE(limiter.allowRequest("carol"));
+    EXPECT_TRUE(limiter.allowRequest("nyela"));
+    EXPECT_FALSE(limiter.allowRequest("nyela"));
 
     clock.now += 61;  // stubbed time moves past the 60 second window
 
-    EXPECT_TRUE(limiter.allowRequest("carol"));
+    EXPECT_TRUE(limiter.allowRequest("nyela"));
 }
 
 TEST(RateLimiterTest, StaysBlockedInsideTheWindow) {
@@ -71,9 +71,9 @@ TEST(RateLimiterTest, StaysBlockedInsideTheWindow) {
     NiceMock<MockLogger> logger;
     RateLimiter limiter("api", 1, 60, clock, logger);
 
-    EXPECT_TRUE(limiter.allowRequest("dave"));
+    EXPECT_TRUE(limiter.allowRequest("ariel"));
     clock.now += 59;
-    EXPECT_FALSE(limiter.allowRequest("dave"));
+    EXPECT_FALSE(limiter.allowRequest("ariel"));
 }
 
 TEST(RateLimiterTest, ResetWindowClearsUsedTokens) {
@@ -81,10 +81,10 @@ TEST(RateLimiterTest, ResetWindowClearsUsedTokens) {
     NiceMock<MockLogger> logger;
     RateLimiter limiter("api", 1, 60, clock, logger);
 
-    EXPECT_TRUE(limiter.allowRequest("erin"));
-    EXPECT_FALSE(limiter.allowRequest("erin"));
+    EXPECT_TRUE(limiter.allowRequest("salako"));
+    EXPECT_FALSE(limiter.allowRequest("salako"));
 
     limiter.resetWindow();
 
-    EXPECT_TRUE(limiter.allowRequest("erin"));
+    EXPECT_TRUE(limiter.allowRequest("salako"));
 }
